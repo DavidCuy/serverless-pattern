@@ -74,3 +74,6 @@ class BaseService:
     def delete_register(self, session: Session, id: int):
         obj = self.get_one(session, id)
         return cast(BaseModel, obj).delete(session)
+    
+    def get_rules_for_store(self):
+        return cast(BaseModel, self.model).rules_for_store()

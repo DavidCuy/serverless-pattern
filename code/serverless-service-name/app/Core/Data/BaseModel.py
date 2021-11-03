@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Dict, List, Type
+from typing import Any, Dict, List, Type
 from sqlalchemy import Column, Integer, orm
 from sqlalchemy.orm.session import Session
 from sqlalchemy.orm.query import Query
@@ -255,6 +255,15 @@ class BaseModel(Base):
             List[str]:  Attributes
         """
         return list(filter(lambda prop: not str(prop).startswith('_'), cls_.__dict__.keys()))
+    
+    @classmethod
+    def rules_for_store(cls_) -> Dict[str, List[Any]]:
+        """Define a dictionary with the rules for each property defined
+
+        Returns:
+            Dict[str, List[Any]]: List of rules for each property
+        """
+        return {}
     
     def property_map(self) -> Dict[str, str]:
         """Remap property with display value

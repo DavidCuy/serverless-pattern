@@ -3,6 +3,7 @@ from typing import cast
 import logging
 
 from app.Exceptions.APIException import APIException
+from app.Validators.RequestValidator import RequestValidator
 
 from ..Services.BaseService import BaseService
 
@@ -54,6 +55,11 @@ def find(service, event: dict):
 def store(service, event: dict):
     session = get_session()
     
+    try:
+        RequestValidator(session, cast(BaseService, service).get_rules_for_store()).validate(event)
+    except APIException as api_error:
+        session.close()
+        return build_response(api_error.status_code, api_error.payload)
     input_params = json.loads(event.get('body'))
 
     try:

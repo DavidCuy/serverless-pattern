@@ -1,6 +1,7 @@
-from typing import Dict, List
+from typing import Any, Dict, List
 from sqlalchemy import Column, Integer, String
 from app.Core.Data.BaseModel import BaseModel
+from app.Validators.RequestValidator import DBValidator
 
 class Example(BaseModel):
     """ Table Examples Database model
@@ -28,3 +29,9 @@ class Example(BaseModel):
         return [
             "id", "Description"
         ]
+    
+    @classmethod
+    def rules_for_store(cls_) -> Dict[str, List[Any]]:
+        return {
+            "Description": ["required", DBValidator("unique", Example, Example.Description), "string"]
+        }

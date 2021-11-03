@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Any, Dict, List
 from sqlalchemy import Column, Integer, String
 from app.Core.Data.BaseModel import BaseModel
 
@@ -27,3 +27,9 @@ class Dump(BaseModel):
         return [
             "id", "Description"
         ]
+    
+    @classmethod
+    def rules_for_store(cls_) -> Dict[str, List[Any]]:
+        return {
+            "Description": ["required", "string"]
+        }
