@@ -1,0 +1,40 @@
+list-example:
+  handler: routes/api/v1/ExampleRoutes.route_index
+  events:
+    - http:
+        path: /api/v1/example
+        method: get
+        cors: ${self:custom.cors}
+
+find-example:
+  handler: routes/api/v1/ExampleRoutes.route_find
+  events:
+    - http:
+        path: /api/v1/example/{id}
+        method: get
+        cors: ${self:custom.cors}
+
+create-example:
+  handler: routes/api/v1/ExampleRoutes.route_insert
+  events:
+    - http:
+        path: /api/v1/example
+        method: post
+        cors: ${self:custom.cors}
+
+update-example:
+  handler: routes/api/v1/ExampleRoutes.route_update
+  events:
+    - http:
+        path: /api/v1/example/{id}
+        method: put
+        cors: ${self:custom.cors}
+
+delete-example:
+  handler: routes/api/v1/ExampleRoutes.route_delete
+  events:
+    - http:
+        path: /api/v1/example/{id}
+        method: delete
+        cors: ${self:custom.cors}
+

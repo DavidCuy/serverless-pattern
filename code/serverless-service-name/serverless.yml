@@ -1,0 +1,46 @@
+service: serverless-service-name
+
+frameworkVersion: '2'
+
+plugins:
+  - serverless-python-requirements
+  - serverless-dotenv-plugin
+  - serverless-offline
+custom:
+  pythonRequirements:
+    dockerizePip: non-linux
+  cors:
+    origin: '*' # <-- Specify allowed origin
+    headers: # <-- Specify allowed headers
+      - Content-Type
+      - X-Amz-Date
+      - Authorization
+      - X-Api-Key
+      - X-Amz-Security-Token
+      - X-Amz-User-Agent
+    allowCredentials: false
+
+provider:
+  name: aws
+  runtime: python3.8
+  lambdaHashingVersion: '20201221'
+  environment:
+    APP_NAME: ${param:APP_NAME, env:APP_NAME}
+    APP_URL: ${param:DB_USER, env:APP_URL}
+    DB_HOST: ${param:DB_HOST, env:DB_HOST}
+    DB_USER: ${param:DB_USER, env:DB_USER}
+    DB_PWD: ${param:DB_PWD, env:DB_PWD}
+    DB_NAME: ${param:DB_NAME, env:DB_NAME}
+    DB_PORT: ${param:DB_PORT, env:DB_PORT}
+    DB_ENGINE: ${param:DB_ENGINE, env:DB_ENGINE}
+    DB_DRIVER: ${param:DB_DRIVER, env:DB_DRIVER}
+  #vpc:
+  #  securityGroupIds:
+  #    - enable if you need to integrate to aws vpc
+  #  subnetIds:
+  #    - enable if you need to integrate to aws vpc
+
+functions:
+  - ${file(routes/api/v1/yml/example_router.yml)}
+  - ${file(routes/api/v1/yml/dump_router.yml)}
+

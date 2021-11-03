@@ -1,0 +1,293 @@
+openapi: 3.0.0
+info:
+  version: '1'
+  title: 'Serverless Pattern API'
+servers:
+  - url: 'http://localhost:3000/dev/api/v1'
+    description: Local environment
+  - url: 'https://example.remote/dev/api/v1'
+    description: Dev environment
+
+paths:
+  /example:
+    get:
+      operationId: listExamples
+      tags:
+        - example
+      parameters:
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'List of example models'
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/PaginationResult'
+                properties:
+                  Data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Example'
+    post:
+      operationId: createExample
+      tags:
+        - example
+      requestBody:
+        description: Example object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Example'
+      responses:
+        '200':
+          description: 'The new Example'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Example'
+  /example/{id}:
+    get:
+      operationId: getExample
+      tags:
+        - example
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'Retrieve an example'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Example'
+    put:
+      operationId: updateExample
+      tags:
+        - example
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Example object
+        required: true
+        content:
+          application/json:
+            schema:
+              anyOf:
+                - $ref: '#/components/schemas/Example'
+      responses:
+        '200':
+          description: 'Get a example'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Example'
+    delete:
+      operationId: deleteExample
+      tags:
+        - example
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'Delete a example'
+          content:
+            application/json:
+              schema:
+                nullable: True
+
+  /dump:
+    get:
+      operationId: listDumps
+      tags:
+        - dump
+      parameters:
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'List of Dump models'
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/PaginationResult'
+                properties:
+                  Data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Dump'
+    post:
+      operationId: createQuestion
+      tags:
+        - dump
+      requestBody:
+        description: Dump object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Dump'
+      responses:
+        '200':
+          description: 'The new Dump'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dump'
+  /dump/{id}:
+    get:
+      operationId: getQuestion
+      tags:
+        - dump
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'Get a Dump'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dump'
+    put:
+      operationId: updateQuestion
+      tags:
+        - dump
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Dump object
+        required: true
+        content:
+          application/json:
+            schema:
+              anyOf:
+                - $ref: '#/components/schemas/Dump'
+      responses:
+        '200':
+          description: 'Get a Dump'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dump'
+    delete:
+      operationId: deletePerson
+      tags:
+        - dump
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'Delete a Dump'
+          content:
+            application/json:
+              schema:
+                nullable: True
+  
+components:
+  schemas:
+    Example:
+      type: object
+      properties:
+        IdExample:
+          type: integer
+        Description:
+          type: string
+    
+    Dump:
+      type: object
+      properties:
+        IdDump:
+          type: integer
+        Description:
+          type: string
+    
+    Pagination:
+      type: object
+      properties:
+        offset:
+          type: integer
+        limit:
+          type: integer
+
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+    
+    ResourceReference:
+      type: object
+      properties:
+        Name:
+          type: string
+        Action:
+          type: string
+        Ref:
+          type: string
+    
+    PaginationResult:
+      type: object
+      properties:
+        Links:
+          type: object
+          properties:
+            next:
+              $ref: '#/components/schemas/ResourceReference'
+            current:
+              $ref: '#/components/schemas/ResourceReference'
+            prev:
+              $ref: '#/components/schemas/ResourceReference'
+        Offset:
+          type: integer
+        Limit:
+          type: integer
+        Total:
+          type: integer
