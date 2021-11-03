@@ -1,34 +1,18 @@
-# Sistema de Evaluación
+# Serverless Pattern
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Amazon AWS](https://img.shields.io/badge/Amazon_AWS-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white)
+![NPM](https://img.shields.io/badge/NPM-%23000000.svg?style=for-the-badge&logo=npm&logoColor=white)
 
-## Reto
-Crea un módulo para un sistema de evaluación educativo que muestre una estructura de preguntas con respuesta de selección múltiple y al final muestre el resultado de cantidad de respuestas correctas y cantidad de respuestas equivocadas, teniendo en cuenta las siguientes condiciones:
-* Cada pregunta tiene 4 opciones de respuesta en la cual una es correcta y tres son erradas.
-* A medida que pasa entre las preguntas se van acumulando los resultados correctos.
-* Cada evaluación debe tener mínimo 5 preguntas.
-* Para cargar las preguntas y opciones de respuesta de las evaluaciones se debe contar con una API local para realizar su lectura y visualización.
+Muchas veces no es complicado iniciar un proyecto de backend, aun cuando tenemos definido algún framework instalado. Por eso en este proyecto de git se muestra una sugerencia para iniciar un proyecto utilizando el framework serverless para python con AWS.
 
-## Entregable
-
-[API publicado en SwaggerHub](https://app.swaggerhub.com/apis-docs/davidcuy6/EvaluationSystemAPI)
-
-Se desarollo una API utilizando serverless framework y se publicó en AWS utilizando los siguientes servicios:
-* AWS Lambda
-* AWS API Gateway
-* AWS RDS con base de datos de MySQL
-
-La aplicación se puede testear utilizando el enlace de SwaggerHub, y se encontrarán múltiples endpoints para CRUDS de modelos de datos, además de un endpoint extra para mostrar los resultados de las respuesta de la persona que resuelva el cuestionario. El diagrama de flujo de cómo se utilizaría esta API (para implementación de frontend tal vez) se muestra acontinuación.
-
-![Diagrama de Flujo](documentation/api/Diagrama-de-flujo.png)
-
-Para más información de cómo ejecutar localmente el repositorio da click [aquí](code/evaluation-system-be/README.md).
-
-## Modelo entidad relación
-De igual manera los modelos de datos basados para la constracción de la solución se muestran acontinuación:
-![ERD](documentation/database/ERD.png)
-
+## Para correr este proyecto
+Nos tenemos que posicionar en la carpeta [code/serverless-service-name](code/serverless-service-name) e instalar los plugins necesarios para ejecutarlo.
 
 ```
 sls plugin install -n serverless-python-requirements
 npm i -D serverless-dotenv-plugin
 npm install serverless-offline --save-dev
 ```
+
+De igual forma se debe copiar y modificar las variables declaradas en el en archivo `.env.example` y renombrarlo a `.env`. Estas serán nuestras variables de entorno, donde queremos guardar la información sensible como base de datos, llaves de acceso, etc.
+
