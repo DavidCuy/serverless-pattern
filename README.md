@@ -16,3 +16,7 @@ npm install serverless-offline --save-dev
 
 De igual forma se debe copiar y modificar las variables declaradas en el en archivo `.env.example` y renombrarlo a `.env`. Estas serán nuestras variables de entorno, donde queremos guardar la información sensible como base de datos, llaves de acceso, etc.
 
+## Documentacion de API
+
+De igual manera se deja un [template de la API en OpenAPI3](documentation/api/api_gateway.yml), para integrarse facilmente con swagger o postman
+
