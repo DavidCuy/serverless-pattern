@@ -19,7 +19,7 @@ class CustomJSONDecoder(json.JSONEncoder):
             return o.isoformat()
         return super(CustomJSONDecoder, self).default(o)
 
-def build_response(status: int, body: dict or str, jsonEncoder: JSONEncoder = CustomJSONDecoder, circular: bool = True, is_body_str: bool = False) -> Dict:
+def build_response(status: int, body: dict or str, jsonEncoder: JSONEncoder = CustomJSONDecoder, circular: bool = True, is_body_str: bool = False, encoder_extras: dict = {}) -> Dict:
     """ Devuelve el formato que acepta azure para una respuesta de HTTP
 
     Args:
@@ -33,12 +33,13 @@ def build_response(status: int, body: dict or str, jsonEncoder: JSONEncoder = Cu
     """
     return {
         "statusCode": status,
-        "body": body if type(body) is str else json.dumps(body, cls=jsonEncoder, check_circular=circular),
+        "body": body if type(body) is str else json.dumps(body, cls=jsonEncoder, check_circular=circular, **encoder_extras),
         "headers":  {
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Credentials': True
             }
     }
+
 
 def serialize_json(data: dict, jsonEncoder: JSONEncoder = CustomJSONDecoder, circular: bool = True) -> str:
     """ Devuelve una cadena en formato JSON de un objeto
@@ -77,4 +78,81 @@ def get_paginate_params(req: dict) -> Tuple[bool, int, int]:
         per_page = 100
     
     return (page, per_page)
+
+def get_filter_params(req: dict) -> dict:
+    """ Obtiene filtros de query
+
+    Args:
+        req (dict): Peticion http
+
+    Returns:
+        dict: Filtros formados como par valor
+    """
+    if req is None:
+        return {}
     
+    ret_dict = {}
+    for key in req.keys():
+        if key == 'page' or key == 'per_page' or key == 'relationships':
+            pass
+        else:
+            ret_dict.update({key: req[key]})
+    
+    return ret_dict
+
+def get_relationship_params(req: dict) -> dict:
+    """ Obtiene filtros de query
+
+    Args:
+        req (dict): Peticion http
+
+    Returns:
+        dict: Filtros formados como par valor
+    """
+    if req is None:
+        return {}
+    
+    ret_dict = {}
+    if 'relationships' in req.keys():
+        ret_dict.update(dict(relationships=req['relationships']))
+    
+    return ret_dict
+ 
+def get_search_params(req: dict) -> dict:
+    """ Obtiene filtros de query
+
+    Args:
+        req (dict): Peticion http
+
+    Returns:
+        dict: Filtros formados como par valor
+    """
+    if req is None:
+        return {}
+    
+    ret_dict = {}
+    for k in req.keys():
+            
+        if str(k).startswith('search-'):
+            key = str(k).split('-')[1]
+            ret_dict[key] = str(req[k]).replace('*', '%')
+    
+    return ret_dict
+ 
+def get_search_method_param(req: dict) -> str:
+    """ Obtiene el metodo de filtrado de query
+
+    Args:
+        req (dict): Peticion http
+
+    Returns:
+        str: Metodo de filtraddo
+    """
+    if req is None:
+        return 'AND'
+    if 'searchmethod' not in req:
+        return 'AND'
+    
+    method = str(req['searchmethod']).upper()
+    return 'AND' if method not in ['AND', 'OR'] else method
+        

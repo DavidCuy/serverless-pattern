@@ -1,5 +1,5 @@
 from typing import Dict, Type
-from app.Core.Data.BaseModel import BaseModel
+from ...Core.Data.BaseModel import BaseModel
 import Environment as env
 
 class ResourceReference:
